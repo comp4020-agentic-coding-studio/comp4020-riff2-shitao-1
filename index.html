@@ -4,32 +4,62 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>jq, redesigned — a command-line JSON processor</title>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header>
       <nav aria-label="Primary">
-        <a href="./" class="brand">jq</a>
-        <a href="#recipes">Recipes</a>
-        <a href="#redesign">About this redesign</a>
-        <a href="https://jqlang.org/">Real site ↗</a>
+        <div class="nav-top">
+          <a href="./" class="brand">jq</a>
+          <button type="button" class="theme-toggle" aria-label="Switch to light theme" aria-pressed="false">
+            <span aria-hidden="true">◐</span>
+          </button>
+        </div>
+        <div class="nav-links">
+          <a href="#install">Install</a>
+          <a href="#recipes">Recipes</a>
+          <a href="#redesign">About this redesign</a>
+          <a href="https://jqlang.org/">Real site ↗</a>
+        </div>
       </nav>
     </header>
     <main>
       <section class="hero">
-        <h1>jq</h1>
-        <p class="tagline">
-          Slice, filter, and reshape JSON straight from the command line — no
-          script file required.
-        </p>
-        <figure class="example" aria-label="A worked example">
-          <pre><code>$ curl -s https://api.github.com/repos/jqlang/jq | jq '.stargazers_count'
+        <pre class="hero-bg" aria-hidden="true">{
+  "name": "jq",
+  "tagline": "sed for JSON data",
+  "stars": 31842,
+  "dependencies": [],
+  "install": {
+    "macos": "brew install jq",
+    "linux": "apt install jq"
+  },
+  "filters": [".", ".foo", ".[]", "select(f)"],
+  "pipeable": true,
+  "license": "MIT"
+}</pre>
+        <div class="hero-content">
+          <h1>jq</h1>
+          <p class="tagline">
+            Slice, filter, and reshape JSON straight from the command line — no
+            script file required.
+          </p>
+          <figure class="example" aria-label="A worked example">
+            <pre><code>$ curl -s https://api.github.com/repos/jqlang/jq | jq '.stargazers_count'
 31842</code></pre>
-        </figure>
-        <div class="cta-row">
-          <a class="button primary" href="https://jqplay.org/">Try it online</a>
-          <a class="button" href="https://jqlang.org/download/">Install jq</a>
-          <a class="button" href="https://jqlang.org/manual/">Read the manual</a>
+          </figure>
+          <div class="cta-row">
+            <a class="button primary" href="https://jqplay.org/">Try it online</a>
+            <a class="button" href="#install">Install jq</a>
+            <a class="button" href="https://jqlang.org/manual/">Read the manual</a>
+          </div>
         </div>
       </section>
 
@@ -43,6 +73,36 @@
           shell scripts, CI logs, an API response you're poking at in a
           terminal — without dragging in a language runtime.
         </p>
+      </section>
+
+      <section id="install" class="install">
+        <h2>Install it your way</h2>
+        <div class="tabs" role="tablist" aria-label="Install commands by platform">
+          <button type="button" role="tab" aria-selected="true" aria-controls="panel-macos" id="tab-macos" class="tab">macOS</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-linux" id="tab-linux" class="tab">Linux</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-windows" id="tab-windows" class="tab">Windows</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-bash" id="tab-bash" class="tab">Bash</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-zsh" id="tab-zsh" class="tab">Zsh</button>
+        </div>
+        <div class="tab-panels">
+          <pre id="panel-macos" role="tabpanel" aria-labelledby="tab-macos" class="tab-panel"><code>brew install jq</code></pre>
+          <pre id="panel-linux" role="tabpanel" aria-labelledby="tab-linux" class="tab-panel" hidden><code># Debian/Ubuntu
+sudo apt install jq
+
+# Fedora/RHEL
+sudo dnf install jq</code></pre>
+          <pre id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" class="tab-panel" hidden><code># winget
+winget install jqlang.jq
+
+# or Chocolatey
+choco install jq</code></pre>
+          <pre id="panel-bash" role="tabpanel" aria-labelledby="tab-bash" class="tab-panel" hidden><code># bash passes the filter through as one argument —
+# single-quote it and nothing else is required
+jq '.[] | select(.stars > 100)' repos.json</code></pre>
+          <pre id="panel-zsh" role="tabpanel" aria-labelledby="tab-zsh" class="tab-panel" hidden><code># zsh's own globbing can eat an unquoted filter that
+# contains [ ] * or ? — quote it, or prefix with noglob
+noglob jq .[0] repos.json</code></pre>
+        </div>
       </section>
 
       <section id="recipes" class="recipes">

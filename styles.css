@@ -1,12 +1,29 @@
 :root {
   color-scheme: light;
 
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", menlo, consolas, monospace;
   --ink: #1a1a1a;
   --paper: #fdfcf9;
+  --surface: #fff;
   --accent: #0b5fff;
   --code-bg: #1e1e2e;
   --code-fg: #e6e6e6;
   --rule: #e2e0d8;
+  --muted: #555;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ink: #e7e5e0;
+  --paper: #14141a;
+  --surface: #1b1b23;
+  --accent: #7db1ff;
+  --code-bg: #0c0c11;
+  --code-fg: #d7d7e2;
+  --rule: #2d2d38;
+  --muted: #9a9aa3;
 }
 
 * {
@@ -15,14 +32,19 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   color: var(--ink);
   background: var(--paper);
 }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(0.5rem);
 }
 
 a {
@@ -33,13 +55,53 @@ nav[aria-label="Primary"] {
   max-width: 48rem;
   margin: 0 auto;
   display: flex;
-  gap: 1.25rem;
+  flex-direction: column;
+  gap: 0.75rem;
   padding: 1rem 1.5rem;
+}
+
+.nav-top {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.nav-links {
+  display: flex;
+  width: 100%;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
+nav[aria-label="Primary"] a:not(.brand) {
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+nav[aria-label="Primary"] a:not(.brand):hover {
+  border-color: var(--accent);
+}
+
+.theme-toggle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
 .brand {
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: 1.1rem;
   text-decoration: none;
@@ -53,6 +115,36 @@ main {
 
 section {
   margin-bottom: 3rem;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: -1rem -1rem auto auto;
+  margin: 0;
+  background: none;
+  color: var(--ink);
+  opacity: 0.05;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: pre;
+  pointer-events: none;
+  user-select: none;
+  transform: rotate(-4deg);
+}
+
+.hero-content {
+  position: relative;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-mono);
 }
 
 .hero h1 {
@@ -72,10 +164,11 @@ pre {
   border-radius: 0.5rem;
   overflow-x: auto;
   font-size: 0.9rem;
+  font-family: var(--font-mono);
 }
 
 code {
-  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
 }
 
 .example {
@@ -94,16 +187,45 @@ code {
   border-radius: 0.4rem;
   border: 1px solid var(--accent);
   text-decoration: none;
+  font-family: var(--font-mono);
   font-weight: 600;
 }
 
 .button.primary {
   background: var(--accent);
-  color: white;
+  color: var(--paper);
 }
 
 .button:not(.primary) {
   color: var(--accent);
+}
+
+.install .tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tab[aria-selected="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.tab-panel[hidden] {
+  display: none;
 }
 
 .recipe-grid {
@@ -135,7 +257,7 @@ footer {
   max-width: 48rem;
   margin: 0 auto;
   padding: 0 1.5rem 2rem;
-  color: #555;
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
